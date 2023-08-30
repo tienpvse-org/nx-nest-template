@@ -1,26 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthInput } from './dto/create-auth.input';
-import { UpdateAuthInput } from './dto/update-auth.input';
+import { InjectKysely } from '@tienpvse/common';
+import { DB } from '../../db';
+import { Kysely } from 'kysely';
 
 @Injectable()
 export class AuthService {
-  create(createAuthInput: CreateAuthInput) {
-    return 'This action adds a new auth';
-  }
+  constructor(@InjectKysely private readonly kysely: Kysely<DB>) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthInput: UpdateAuthInput) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async register() {
+    const createdUser = await this.kysely
+      .insertInto('user')
+      .values({})
+      .returningAll()
+      .executeTakeFirst();
+    return createdUser;
   }
 }

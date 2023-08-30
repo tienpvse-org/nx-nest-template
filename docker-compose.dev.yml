@@ -1,0 +1,22 @@
+version: '3.6'
+
+services:
+  auth:
+    image: postgres:14.0-alpine
+    environment:
+      POSTGRES_PASSWORD: ${AUTH_POSTGRES_PASSWORD}
+      POSTGRES_USER: ${AUTH_POSTGRES_USER}
+      POSTGRES_DB: ${AUTH_POSTGRES_DB}
+    ports:
+      - ${AUTH_POSTGRES_EXPOSED_PORT}:5432
+    volumes:
+      - auth_db_data:/var/lib/postgresql
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    name: app_network
+volumes:
+  auth_db_data:
+    name: auth_db_data
